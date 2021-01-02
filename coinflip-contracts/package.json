@@ -1,7 +1,7 @@
 {
   "name": "coinflip-2v0",
-  "version": "1.0.0",
-  "description": "CoinFipp 2v0",
+  "version": "2.0.0",
+  "description": "CoinFlipp 2v0",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -26,7 +26,9 @@
     "game",
     "coinflip",
     "truffle",
-    "ganache"
+    "ganache",
+    "ropsten",
+    "provable"
   ],
   "bugs": {
     "url": "https://github.com/laurenzius-dlt/coinflip-2v0/issues"
