@@ -1,0 +1,109 @@
+@keyframes rotation {
+  0% {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+  50% {
+    transform: rotate3d(0, 1, 0, 180deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 360deg);
+  }
+}
+
+@keyframes ethereum {
+  0% {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+  50% {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+}
+
+@keyframes bitcoin {
+  0% {
+    transform: rotate3d(0, 1, 0, 180deg);
+  }
+  50% {
+    transform: rotate3d(0, 1, 0, 180deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 180deg);
+  }
+}
+
+.coin-container {
+  width: 200px;
+  height: 200px;
+}
+
+.coin.ethereum {
+  animation-name: ethereum;
+}
+
+.coin.bitcoin {
+  animation-name: bitcoin;
+}
+
+.coin.rotation {
+  animation-name: rotation;
+}
+
+.coin {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  line-height: 50px;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: 1.5s;
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+}
+
+.face > img {
+  width: 200px;
+  height: 200px;
+}
+
+.face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  backface-visibility: hidden;
+}
+
+.heads {
+  background-color: white;
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+.tails {
+  background-color: white;
+  z-index: 1;
+  transform: rotateY(180deg);
+}
+.headswin:hover > div > .tailswin,
+.tailswin:hover > div > .headswin,
+.headswin:hover > div > .headswin,
+.tailswin:hover > div > .tailswin {
+  opacity: 0.50;
+}
+
+.headswin .tailswin,
+.tailswin .headswin {
+  display: none;
+}
+
+.headswin .headswin,
+.tailswin .tailswin {
+  display: inline;
+}

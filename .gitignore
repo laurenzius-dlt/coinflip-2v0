@@ -1,0 +1,48 @@
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# free file sync artifact
+.sync.ffs_d
+.sync.*
+
+# exclude secret BEFORE PUBLISHING TO GITHUB!!!
+.secret
+
+# exclude node_modules (from npm)
+coinflip-contracts/node_modules/
+coinflip-contracts/jspm_packages/
+
+# node.js Optional npm cache directory
+.npm
+
+# exclude build (from truffle)
+coinflip-contracts/build/
+coinflip-contracts/package-lock.json
+
+# exclude local tools
+*.sh
