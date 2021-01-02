@@ -11,11 +11,11 @@ var lastQueryId = "";
 var selectedAddress = "";
 var eventsReceived = [];
 var lastBlockNumber = "latest";
-var gamblingFee = new BN('40000000000000000');
+var gamblingFee = new BN('50000000000000000');
 
 $(document).ready(function() {
     window.ethereum.enable().then(function(accounts){ // metamask will popup and ask for connecting an account
-        let address="0xf26a5847Dfaa424861d571b89AaDeCC0817Ee9Ee"; // taken from migrate result
+        let address="0xEB94969Ebd5A40d7C7c2Cd4A4125eBe74Bc88E90"; // taken from migrate result
         selectedAddress = accounts[0];
         contractInstance = new web3.eth.Contract(abi, address, {from: accounts[0]});
         console.log("contact instance:");
