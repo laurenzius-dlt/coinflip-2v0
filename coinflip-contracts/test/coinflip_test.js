@@ -2,7 +2,7 @@
 var BN = web3.utils.BN;
 const Coinflip = artifacts.require("Coinflip");
 const truffleAssert = require("truffle-assertions");
-const gamblingFee = new BN('40000000000000000');
+const gamblingFee = new BN('50000000000000000');
 
 contract("Coinflip", async function(accounts){
   let instance, cost, owner, contractAddress, accountAddress;

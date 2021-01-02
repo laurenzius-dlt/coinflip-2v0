@@ -1,16 +1,20 @@
-/* provable
 import "./provableAPI.sol";
+/* provable
 */
 import "./Ownable.sol";
 pragma solidity 0.5.12;
-
-contract Coinflip is Ownable/*, usingProvable*/ {
+/* non provable
+contract Coinflip is Ownable {
+*/
+/* provable
+*/
+contract Coinflip is Ownable, usingProvable {
 
   uint256 constant NUM_RANDOM_BYTES_REQUESTED = 1;
   uint256 constant POSSIBILITIES = 2;
   uint256 constant QUERY_EXECUTION_DELAY = 0;
   uint256 constant GASLIMIT_FOR_CALLBACK = 2000000;
-  uint constant GAMBLING_FEE = 40000000000000000;
+  uint constant GAMBLING_FEE = 50000000000000000;
 
   uint public eventnumber;
   uint public totalContractBalance;
@@ -39,10 +43,14 @@ contract Coinflip is Ownable/*, usingProvable*/ {
       require(msg.value >= cost, "Not enough Ether!");
       _;
   }
-
-  constructor () public /*payable*/ {
-    /* provable
+  /* non provable
+  constructor () public {
+  */
+  /* provable
+  */
+  constructor () public payable {
     provable_setProof(proofType_Ledger);
+    /* provable
     */
   }
 
@@ -63,13 +71,13 @@ contract Coinflip is Ownable/*, usingProvable*/ {
     require(msg.value >= _bet, "REQUIRED: startDraw(): msg.value >= _bet,");
     require(msg.sender == _player, "REQUIRED: startDraw(): msg.sender == _player");
 
-    /* provable
     uint provableRandomDSQueryPrice = provable_getPrice("random", GASLIMIT_FOR_CALLBACK);
+    /* provable
     */
 
     /* no provable
-    */
     uint provableRandomDSQueryPrice = 0;
+    */
     require(provableRandomDSQueryPrice < GAMBLING_FEE, "REQUIRED: startDraw(): provableRandomDSQueryPrice < GAMBLING_FEE");
     totalContractBalance += GAMBLING_FEE;
     totalContractBalance -= provableRandomDSQueryPrice;
@@ -78,16 +86,16 @@ contract Coinflip is Ownable/*, usingProvable*/ {
     totalPlayerBalance -= GAMBLING_FEE;
 
     /* provable
+    */
     bytes32 queryId = provable_newRandomDSQuery(
       QUERY_EXECUTION_DELAY,
       NUM_RANDOM_BYTES_REQUESTED,
       GASLIMIT_FOR_CALLBACK
     );
-    */
 
     /* no provable
-    */
     bytes32 queryId = testRandom(false);
+    */
 
     if(0x0000000000000000000000000000000000000000 == draws[queryId].player) {
       Draw memory newDraw;
@@ -117,13 +125,13 @@ contract Coinflip is Ownable/*, usingProvable*/ {
         draws[queryId].headWins
     );
     /* no provable
-    */
     testRandom(true);
+    */
   }
 
   function __callback(bytes32 _queryId, string memory _result, bytes memory _proof) public {
-    /* provable
     require(msg.sender == provable_cbAddress());
+    /* provable
     */
     assert(POSSIBILITIES <= NUM_RANDOM_BYTES_REQUESTED * 256);
     uint256 randomNumber = uint256(keccak256(abi.encodePacked(_result))) % POSSIBILITIES;
