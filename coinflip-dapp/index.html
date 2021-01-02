@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<!--
+  ASSIGNMENT
+    build dapp for coinflip app
+      a) enter amount of ETH to bet
+      b) press "flip" button
+      c) result is either 0 (lost) or 1 (win)
+      d) if 1 (win) => user gets 2x of bet or at least the contact balance
+      e) if 0 (lost) => user gets 0x of bet and the bet stays in contract balance
+  TWO PARTS
+  1) with sudo random genarator (on-chain)
+     place the bet, flip a coin, payout
+  2) with real randomness via oracle (off-chain)
+     move on with real randomness
+  USER
+    nice GUI
+    Button "Flip"
+  TECH
+    web3.js
+    SmartContract@Truffle
+
+-->
+    <meta charset="utf-8">
+    <!--
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coinflip Dapp 1v0</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./web3.min.js"></script>
+    <script type="text/javascript" src="./abi.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous">
+      <link rel="stylesheet" href="flip.css">
+      <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB4klEQVQ4T5WSwUsbQRTG33NzSsmGeCjqP2AvQQraXvsPtIfebO/Sk4ceCsXLuk6EGOihN++lHjpDKfRWhJ4SoSazO6tRIWyxh1BaxItoEpJ9ZaITJms89F2WefvNb75v5iH8R+GNlqw9pjeG0U0t8n2/yDknpdSBFpi+DboTkBDhOit9/yw4hUHw5C6jI4ChG+E6Y8tI8FEIDoD4IpRyJ32adjkG0Jt1s1wu53q9/jEAzXHBda896PXmD5vNC9uJ3jwE2Nmus7MyILzR/4YOrquigmDYMweNADbV29x84AySqD8Y9E9Ojn/s1WqUz+eXCDGTmZpakI3G0RjEzk5E+HZtTRwdNKfbv9tFIpqO4xiA6CybzUaFQuE8iqLn6Rijted597/t7r7rdjovTbQh4KYcx/mQd93XrVbrr5mF0R1ojX46Viq9/3V62g6CYJkAij/jGBBRua67k8vl5lQYrt5yYD+P53kz6GSihKBWrVbrQWOfZmZnFxHxMSVJUSn1x7izv2Nz4m9sPEPALwRwJQTXbrNA9DQMw6/pgZo4iVrkM7aNBCufBNcRtpWUr+znMyBMz4BZb1Uq97qdruSCU8ZxHjbq9UsbMPESjcDQGWOPhBCJlHJ/0sDduoO0m3TeSet/0azZFnrQzXMAAAAASUVORK5CYII=" type="image/x-icon" />
+      <!--[if lt IE 8]>
+         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+      <![endif]-->
+  </head>
+  <body>
+    <div class="jumbotron jumbotron-fluid mx-auto p-0 p-md-1 pt-0 mb-0" style="width: 100%">
+      <h2 class="display-4 text-center d-none d-md-block">Coinflip Dapp 1v0</h2>
+      <h3 class="text-center d-md-none d-block">Coinflip Dapp 1v0</h3>
+      <p class="lead text-center mb-0">flip the coin to double your bet</p>
+    </div>
+    <div class="container-xl mt-0 mt-lg-4 m-ms-0">
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="pt-2 p-0 col-lg-8 col-md-10 col-12">
+          <div class="col">
+            <div class="form-group text-center">
+              <h4>you bet</h4>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm bg-light m-1 p-1">
+                    <label for="bet_ether" class="text-center">ether</label><br>
+                    <input type="number" class="form-control" id="bet_ether" value="0">
+                  </div>
+                  <div class="col-sm bg-light m-1 p-1">
+                    <label for="bet_gwei" class="text-center">gwei</label><br>
+                    <input type="number" class="form-control" id="bet_gwei" value="0">
+                  </div>
+                  <div class="col-sm bg-light m-1 p-1">
+                    <label for="bet_wei" class="text-center">wei</label><br>
+                    <input type="number" class="form-control" id="bet_wei" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="col p-0 col-lg-8 col-md-10 col-12">
+          <!--<div class="form-group border-primary text-center m-0 p-4 pb-0">       m-0 pt-0 pb-0 pt-md-4 px-4 -->
+          <div class="form-group border-primary text-center m-0 px-4 pt-0 pb-0 pt-md-4">
+                <input type="text" class="form-control mb-1" id="bet" value="0" readonly>
+              <input type="text" class="form-control" id="bet_readable" value="" readonly>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+<!--
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="text-center pt-2 p-0 col-lg-8 col-md-10 col-12">
+            <h4>that this side wins:</h4>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+-->
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="text-center pt-2 p-0 col-lg-8 col-md-10 col-12">
+          <div class="container-fluid">
+            <div id="who_should_win" class="row tailswin">
+              <div class="col m-1 p-1 text-center">
+                <h4>that this side <span style="color: green">wins</span></h4>
+                <img class="headswin" src="ethereum2.png" style="width: 25%">
+                <img class="tailswin" src="bitcoin2.png" style="width: 25%">
+              </div>
+              <div class="col m-1 p-1 text-center">
+                <h4>and this side <span style="color: red">looses</span></h4>
+                <img class="headswin" src="bitcoin2.png" style="width: 25%">
+                <img class="tailswin" src="ethereum2.png" style="width: 25%">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="col-lg-8 col-md-10 col-12">
+          <div class="col p-2">
+            <div class="coin-container mx-auto">
+              <div id="coin" class="coin ethereum">
+                <div class="face heads shadow-lg rounded-circle">
+                  <img src="ethereum2.png">
+                </div>
+                <div class="face tails shadow-lg rounded-circle">
+                  <img src="bitcoin2.png" class="rounded">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="col-lg-8 col-md-10 col-12">
+          <div class="col">
+            <br>
+            <button type="button" id="flip_coin_button" class="btn btn-secondary btn-lg btn-block">FLIP</button>
+            <br>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="col-lg-8 col-md-10 col-12">
+          <div class="col">
+            <div id="flip_result" class="d-none alert alert-light"><span></span></div>
+            <div id="player_balance_output" class="d-none alert alert-secondary" role="alert"><span></span></div>
+            <div id="balance_output" class="d-none alert alert-secondary" role="alert"><span></span></div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+      <div class="row m-1">
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+        <div class="col-lg-8 col-md-10 col-12">
+          <div id="links" class="col">
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-1 d-none d-md-block">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>
