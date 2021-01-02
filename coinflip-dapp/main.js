@@ -15,7 +15,7 @@ var gamblingFee = new BN('40000000000000000');
 
 $(document).ready(function() {
     window.ethereum.enable().then(function(accounts){ // metamask will popup and ask for connecting an account
-        let address="0x1B01f50e8fE14eCC7F96D55a6bbe2d84BAfe8358"; // taken from migrate result
+        let address="0xf26a5847Dfaa424861d571b89AaDeCC0817Ee9Ee"; // taken from migrate result
         selectedAddress = accounts[0];
         contractInstance = new web3.eth.Contract(abi, address, {from: accounts[0]});
         console.log("contact instance:");
