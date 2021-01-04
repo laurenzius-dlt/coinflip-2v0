@@ -39,10 +39,17 @@ contract Coinflip is Ownable, usingProvable {
   event coinFlippedAndLost(uint eventnr, address payable player, bytes32 queryId, uint loss);
   event coinFlippedAndWon(uint eventnr, address payable player, bytes32 queryId, uint profit);
 
+  /*
   modifier mincosts(uint cost){
       require(msg.value >= cost, "Not enough Ether!");
       _;
   }
+  */
+  modifier mincosts(){
+      require(GAMBLING_FEE >= cost, "Not enough Ether to pay the gambling fee!");
+      _;
+  }
+
   /* non provable
   constructor () public {
   */
@@ -59,18 +66,17 @@ contract Coinflip is Ownable, usingProvable {
     return eventnumber;
   }
 
-  function flip(bool betOnHeads) public payable mincosts(GAMBLING_FEE){
+  function flip(bool betOnHeads) public payable mincosts(){
     // the second oracle call requires at least 4000000 wei = 0.004 ether
-    require(GAMBLING_FEE<msg.value,'REQUIRE: flip(): must be more than the gambling fee, which is 0.01 ether');
+    // require(GAMBLING_FEE<msg.value,'REQUIRE: flip(): must be more than the gambling fee, which is 0.01 ether');
     myDeposit();
     uint myBet = msg.value - GAMBLING_FEE;
     startDraw(msg.sender, myBet, betOnHeads);
   }
 
   function startDraw(address payable _player, uint _bet, bool _headwins) private{
-    require(msg.value >= _bet, "REQUIRED: startDraw(): msg.value >= _bet,");
-    require(msg.sender == _player, "REQUIRED: startDraw(): msg.sender == _player");
-
+    // require(msg.value >= _bet, "REQUIRED: startDraw(): msg.value >= _bet,");
+    // require(msg.sender == _player, "REQUIRED: startDraw(): msg.sender == _player");
     uint provableRandomDSQueryPrice = provable_getPrice("random", GASLIMIT_FOR_CALLBACK);
     /* provable
     */
